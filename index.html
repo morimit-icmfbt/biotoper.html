@@ -239,7 +239,13 @@ select{font-size:12px;padding:4px 7px;border:1px solid #C5B8A2;border-radius:6px
       <p class="empty-msg" id="g-res-empty">項目を選ぶと料金が表示されます</p>
     </div>
   </div>
-  <div class="nav-row"><span></span><button class="nav-btn primary" onclick="goPage(2)">次へ：特典を確認する ›</button></div>
+  <!-- グループタブ：戻るボタン -->
+  <div id="group-back-row" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid #E8E2D8;text-align:center">
+    <p style="font-size:11px;color:#8A7E70;margin-bottom:10px">このシミュレーターは料金確認専用です。ビオトーパー登録は個人タブから行ってください。</p>
+    <button class="nav-btn primary" onclick="switchToPersonal()">← あなた個人の参加スタイル選択へ</button>
+  </div>
+  <!-- 個人タブ：次へボタン -->
+  <div id="personal-next-row" class="nav-row"><span></span><button class="nav-btn primary" onclick="goPage(2)">次へ：特典を確認する ›</button></div>
 </div>
 
 <!-- STEP2 特典一覧 -->
@@ -386,7 +392,8 @@ function show(id){document.getElementById(id).style.display='';}
 function hide(id){document.getElementById(id).style.display='none';}
 function hid(id){document.getElementById(id).classList.add('hidden');}
 function vis(id){document.getElementById(id).classList.remove('hidden');}
-function showTab(id,btn){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});btn.classList.add('active');document.getElementById('tab-'+id).classList.add('active');}
+function showTab(id,btn){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});btn.classList.add('active');document.getElementById('tab-'+id).classList.add('active');var pRow=document.getElementById('personal-next-row');var gRow=document.getElementById('group-back-row');if(id==='personal'){if(pRow)pRow.style.display='';if(gRow)gRow.style.display='none';}else{if(pRow)pRow.style.display='none';if(gRow)gRow.style.display='';}}
+function switchToPersonal(){var btn=document.querySelectorAll('.tab-btn')[0];showTab('personal',btn);}
 function applyBenefitHighlight(){COL_ORDER.forEach(function(col){var th=document.getElementById('bh-'+col);if(th){th.classList.remove('col-hl');var b=th.querySelector('.you-badge');if(b)b.remove();}for(var i=0;i<ROW_COUNT;i++){var td=document.getElementById('bc-'+col+'-'+i);if(td)td.classList.remove('col-hl');}});if(!pTier)return;var hlCol=pTier;var th=document.getElementById('bh-'+hlCol);if(th){th.classList.add('col-hl');var badge=document.createElement('div');badge.className='you-badge';badge.textContent='あなた';th.appendChild(badge);}for(var i=0;i<ROW_COUNT;i++){var td=document.getElementById('bc-'+hlCol+'-'+i);if(td)td.classList.add('col-hl');}var hint=document.getElementById('p2-hint');if(hint)hint.innerHTML='<span style="color:#2D9A6B;font-weight:600">▶ 緑枠があなたの区分（'+TIER_LABELS[pTier]+'）です</span>　他の区分と見比べてみてください。';}
 var currentPage=1;
 function goPage(n){if(n===2)applyBenefitHighlight();if(n===4){var form=document.getElementById('regForm');var name=form.querySelector('[name=name]').value.trim();var furi=form.querySelector('[name=furigana]').value.trim();var email=form.querySelector('[name=email]').value.trim();var tier=form.querySelector('[name=tier]').value;if(!name||!furi||!email||!tier){alert('お名前・ふりがな・メールアドレス・登録区分は必須です');return;}updateFinalSummary();}document.getElementById('page'+currentPage).style.display='none';currentPage=n;document.getElementById('page'+n).style.display='';['sf1','sf2','sf3','sf4'].forEach(function(id,i){var el=document.getElementById(id);el.classList.remove('active','done');if(i+1<n)el.classList.add('done');else if(i+1===n)el.classList.add('active');});}
