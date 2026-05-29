@@ -404,7 +404,24 @@ function pUpdateNotes(){if(!pTier)return;var t=pTier==='home'&&document.getEleme
 function syncTierSelect(){var bioHome=document.getElementById('p-bio-home')?document.getElementById('p-bio-home').checked:false;var ts=document.getElementById('tierSelect');if(!ts||pTier!=='home'&&pTier!=='home_bio')return;ts.value=bioHome?'home_bio':'home';}
 function pCalc(){syncTierSelect();pUpdateNotes();if(!pTier){hide('p-res-monthly');hide('p-res-ev');show('p-res-empty');return;}if(pTier==='home'&&!pCourse){hide('p-res-monthly');hide('p-res-ev');show('p-res-empty');return;}show('p-res-monthly');hide('p-res-empty');var bioHome=document.getElementById('p-bio-home').checked;var t=pTier==='home'?(bioHome?'home_bio':'home'):pTier;var monthly=0,subItems=[];if(pTier==='home'){monthly=pCoursePrice;subItems.push('月謝 '+fmt(pCoursePrice));if(pDiscs.indexOf('silver')>=0){monthly-=500;subItems.push('シルバー割 −500円');}if(pDiscs.indexOf('gold')>=0){monthly-=1000;subItems.push('ゴールド割 −1,000円');}if(pDiscs.indexOf('family')>=0){monthly-=500;subItems.push('家族割 −500円');}if(bioHome){monthly+=500;subItems.push('ビオトーパー登録 +500円');}}else if(pTier==='bb'){monthly=4000;subItems.push('本サブスク 4,000円');}else if(pTier==='shima'){monthly=0;if(document.getElementById('p-bio-shima').checked){monthly+=1000;subItems.push('ビオトーパー登録 +1,000円');}else{subItems.push('島村月謝のみ（別途）');}}else if(pTier==='tsuido'){monthly=2000;subItems.push('都度会員費 2,000円');}else if(pTier==='oen'){monthly=500;subItems.push('応援サポーター 500円');}document.getElementById('p-res-monthly').style.display='';document.getElementById('p-res-monthly-val').textContent=(pTier==='shima'&&monthly===0)?'島村月謝のみ（別途）':fmt(monthly);document.getElementById('p-res-monthly-sub').textContent=subItems.join('　');document.getElementById('p-res-includes').innerHTML=(P_INCLUDES[t]||[]).map(function(s){return s.startsWith('※')?'<span style="color:#C98A2A;font-size:11px">'+s+'</span>':'✓ '+s;}).join('<br>');var evLines='';[{k:'onfork',map:P_ONFORK,label:'音叉来会（収録）'},{k:'video',map:P_VIDEO,label:'音叉来会（動画持参）'},{k:'concert',map:P_CONCERT,label:'BigBand公演'},{k:'reh',map:P_REH,label:'リハ・練習室（OFF叉来会）'}].forEach(function(item){if(document.getElementById('p-'+item.k).checked){var v=item.map[t]!==undefined?item.map[t]:item.map['home'];evLines+=item.label+'：'+(v===0?'含む（サブスク内）':v===-1?'<span style="color:#D04040">参加不可</span>':fmt(v))+'<br>';}});if(evLines){show('p-res-ev');document.getElementById('p-res-ev-lines').innerHTML=evLines;}else{hide('p-res-ev');}updateSimSummary();}
 function calcMonthly(){if(!pTier)return 0;var base=pCoursePrice-(pDiscs.indexOf('silver')>=0?500:0)-(pDiscs.indexOf('gold')>=0?1000:0)-(pDiscs.indexOf('family')>=0?500:0);var bioHome=document.getElementById('p-bio-home')?document.getElementById('p-bio-home').checked:false;if(pTier==='home'||pTier==='home_bio'){return bioHome?base+500:base;}if(pTier==='bb')return 4000;if(pTier==='shima')return document.getElementById('p-bio-shima').checked?1000:0;if(pTier==='tsuido')return 2000;if(pTier==='oen')return 500;return 0;}
-function updateSimSummary(){var box=document.getElementById('simSummary');if(!box||!pTier){if(box)box.style.display='none';return;}var t=pTier==='home'&&document.getElementById('p-bio-home').checked?'home_bio':pTier;var monthly=calcMonthly();box.style.display='';box.innerHTML='シミュレーターの結果：<strong>'+TIER_LABELS[t]+'</strong>　月額 <strong>'+(pTier==='shima'&&monthly===0?'島村月謝のみ（別途）':fmt(monthly))+'</strong>';document.getElementById('simResultHidden').value=TIER_LABELS[t]+'　月額'+(pTier==='shima'&&monthly===0?'島村月謝のみ':monthly+'円');}
+function updateSimSummary(){
+  var box=document.getElementById('simSummary');
+  if(!box||!pTier){if(box)box.style.display='none';return;}
+  var bioHome=document.getElementById('p-bio-home')?document.getElementById('p-bio-home').checked:false;
+  var t=(pTier==='home'||pTier==='home_bio')?(bioHome?'home_bio':'home'):pTier;
+  var monthly=calcMonthly();
+  box.style.display='';
+  var discLines=[];
+  if((pTier==='home'||pTier==='home_bio')&&pCoursePrice>0){
+    if(pDiscs.indexOf('silver')>=0)discLines.push('シルバー割 −500円');
+    if(pDiscs.indexOf('gold')>=0)discLines.push('ゴールド割 −1,000円');
+    if(pDiscs.indexOf('family')>=0)discLines.push('家族割 −500円');
+    if(bioHome)discLines.push('ビオトーパー登録 +500円');
+  }
+  var discHtml=discLines.length>0?'　<span style="font-size:11px;color:#2D9A6B">（'+discLines.join('・')+'）</span>':'';
+  box.innerHTML='シミュレーターの結果：<strong>'+TIER_LABELS[t]+'</strong>　月額 <strong>'+(pTier==='shima'&&monthly===0?'島村月謝のみ（別途）':fmt(monthly))+'</strong>'+discHtml;
+  document.getElementById('simResultHidden').value=TIER_LABELS[t]+'　月額'+(pTier==='shima'&&monthly===0?'島村月謝のみ':monthly+'円')+(discLines.length>0?'（'+discLines.join('・')+'）':'');
+}
 var gTier=null,gKanyo='none';
 var G_ENTRY={bb:{s:4000,m:3000},tsuido:{s:8000,m:6000},outer:{s:12000,m:9000}};
 var G_ONFORK={bb:4000,tsuido:8000,outer:12000};
