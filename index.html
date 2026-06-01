@@ -323,6 +323,7 @@ select{font-size:12px;padding:4px 7px;border:1px solid #C5B8A2;border-radius:6px
         <option value="bb">BigBand本サブスク・純ビオ（4,000円/月）</option>
         <option value="tsuido">都度会員・つどビオ（2,000円/月）</option>
         <option value="oen">応援ビオトーパー（500円/月）</option>
+        <option value="custom">個別プランを相談したい</option>
       </select>
     </div>
     <div class="form-group" id="instrumentRow" style="display:none">
@@ -334,6 +335,7 @@ select{font-size:12px;padding:4px 7px;border:1px solid #C5B8A2;border-radius:6px
       <textarea name="message" class="form-input" rows="3" placeholder="自由にどうぞ" style="resize:vertical"></textarea>
     </div>
     <input type="hidden" name="sim_result" id="simResultHidden" value="">
+    <input type="hidden" name="payment_method" id="paymentMethodHidden" value="">
     <div class="nav-row"><button type="button" class="nav-btn" onclick="goPage(2)">‹ 戻る</button><button type="button" class="nav-btn primary" onclick="goPage(4)">次へ：同意して送信 ›</button></div>
   </form>
 </div>
@@ -348,6 +350,19 @@ select{font-size:12px;padding:4px 7px;border:1px solid #C5B8A2;border-radius:6px
     <label class="consent-check"><input type="checkbox" id="consent3" onchange="checkConsent()"><span>入力した情報がIcMF主宰・森充にのみ共有されることを了解しました</span></label>
   </div>
   <div id="finalSummary" style="margin-top:12px;font-size:12px;color:#5A5048;line-height:1.9;padding:10px 12px;border:1px solid #E0D9CF;border-radius:6px;background:#FAF8F5"></div>
+
+  <div style="margin-top:14px;padding:14px;border:1px solid #C5B8A2;border-radius:6px;background:#FDFCFA">
+    <p style="font-size:12px;font-weight:600;color:#2C2C2C;margin-bottom:10px">お支払い方法を選んでください<span style="color:#D04040;margin-left:4px;font-size:11px">必須</span></p>
+    <label style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid #C5B8A2;border-radius:6px;background:#FDFCFA;cursor:pointer;margin-bottom:7px">
+      <input type="radio" name="payment_method" value="credit" id="pay-credit" onchange="onPaymentChange()" style="margin-top:2px;width:14px;height:14px;accent-color:#2D9A6B;flex-shrink:0">
+      <span style="font-size:12px;line-height:1.6;color:#2C2C2C"><strong>クレジットカード</strong><br><span style="font-size:11px;color:#8A7E70">登録後は毎月自動引き落とし（Square）</span></span>
+    </label>
+    <label style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid #C5B8A2;border-radius:6px;background:#FDFCFA;cursor:pointer">
+      <input type="radio" name="payment_method" value="bank" id="pay-bank" onchange="onPaymentChange()" style="margin-top:2px;width:14px;height:14px;accent-color:#2D9A6B;flex-shrink:0">
+      <span style="font-size:12px;line-height:1.6;color:#2C2C2C"><strong>銀行振込</strong><br><span style="font-size:11px;color:#8A7E70">毎月請求書をお送りします。お振込みいただく方式です。</span></span>
+    </label>
+  </div>
+
   <button class="submit-btn" id="submitBtn" disabled onclick="submitForm()">同意して登録する</button>
   <div class="nav-row" style="margin-top:12px"><button class="nav-btn" onclick="goPage(3)">‹ 戻る</button><span></span></div>
 </div>
@@ -358,7 +373,7 @@ select{font-size:12px;padding:4px 7px;border:1px solid #C5B8A2;border-radius:6px
     <div style="font-size:40px;margin-bottom:1rem">🌿</div>
     <p style="font-size:17px;font-weight:600;color:#2C2C2C;margin-bottom:8px">登録を受け付けました</p>
     <div id="sq-home" style="display:none">
-      <p style="font-size:13px;color:#5A5048;line-height:1.8;margin-bottom:20px">ビオトープへようこそ。<br>月額については森充より個別にご連絡します。</p>
+      <p style="font-size:13px;color:#5A5048;line-height:1.8;margin-bottom:20px" id="sq-home-msg">ビオトープへようこそ。<br>月額については森充より個別にご連絡します。</p>
     </div>
     <div id="sq-pay" style="display:none">
       <p style="font-size:13px;color:#5A5048;line-height:1.8;margin-bottom:16px">ビオトープへようこそ。<br>下のボタンから初月分の月会費をお支払いください。</p>
@@ -384,7 +399,7 @@ var P_INCLUDES={
   oen:['アプリ響の杜閲覧','公演の観客として応援']
 };
 var SQUARE_LINKS={bb:'https://square.link/u/xdJQUpg9',shima:'https://square.link/u/4TONq0gs',tsuido:'https://square.link/u/ZvMUMY2q',oen:'https://square.link/u/nCLptD0w'};
-var TIER_LABELS={home:'自宅レッスン生（未登録）',home_bio:'自宅レッスン生・ビオトーパー登録',shima:'島村レッスン生（しまビオ）',bb:'BigBand本サブスク（純ビオ）',tsuido:'都度会員（つどビオ）',oen:'応援ビオトーパー'};
+var TIER_LABELS={home:'自宅レッスン生（未登録）',home_bio:'自宅レッスン生・ビオトーパー登録',shima:'島村レッスン生（しまビオ）',bb:'BigBand本サブスク（純ビオ）',tsuido:'都度会員（つどビオ）',oen:'応援ビオトーパー',custom:'個別プラン希望'};
 var COL_ORDER=['home','home_bio','shima','bb','tsuido','oen','outer'];
 var ROW_COUNT=11;
 function fmt(n){return n.toLocaleString('ja-JP')+'円';}
@@ -432,8 +447,24 @@ function gUpdateTable(){var wrap=document.getElementById('g-entry-table');if(!gT
 function gUpdateNotes(){if(!gTier)return;var n=parseInt(document.getElementById('g-gr-n').value)||2;var of_u=n<=3?G_ONFORK[gTier]:G_ENTRY[gTier].m;var vi_u=n<=3?G_VIDEO[gTier]:(gTier==='bb'?3000:gTier==='tsuido'?6000:9000);document.getElementById('g-onfork-note').textContent='1人あたり '+fmt(of_u)+'（'+n+'名）';document.getElementById('g-video-note').textContent='1人あたり '+fmt(vi_u)+'（'+n+'名）';}
 function gSetKanyo(btn){document.querySelectorAll('[data-kanyo]').forEach(function(b){b.classList.remove('sel');});btn.classList.add('sel');gKanyo=btn.dataset.kanyo;['g-thin-desc','g-thick-desc','g-visit-desc'].forEach(hid);if(gKanyo==='thin')vis('g-thin-desc');if(gKanyo==='thick')vis('g-thick-desc');if(gKanyo==='visit')vis('g-visit-desc');gCalc();}
 function gCalc(){gUpdateNotes();var hasAny=false;var n=parseInt(document.getElementById('g-gr-n').value)||2;var thN=parseInt(document.getElementById('g-thick-n').value)||3;var onfork=document.getElementById('g-onfork').checked;var video=document.getElementById('g-video').checked;document.getElementById('g-n-row').style.display=(onfork||video)?'flex':'none';var eb=document.getElementById('g-res-ev');if(gTier&&(onfork||video)){eb.style.display='';hasAny=true;var of_u=n<=3?G_ONFORK[gTier]:G_ENTRY[gTier].m;var vi_u=n<=3?G_VIDEO[gTier]:(gTier==='bb'?3000:gTier==='tsuido'?6000:9000);var lines='';if(onfork)lines+='音叉来会（収録）：'+fmt(of_u)+'/人 × '+n+'名 ＝ <strong>'+fmt(of_u*n)+'</strong><br>';if(video)lines+='音叉来会（動画持参）：'+fmt(vi_u)+'/人 × '+n+'名 ＝ <strong>'+fmt(vi_u*n)+'</strong><br>';document.getElementById('g-res-ev-lines').innerHTML=lines;document.getElementById('g-res-ev-note').textContent=(n>=4?'4名以上割引単価':'3名以下単価')+(gTier==='bb'?'（本サブスク）':gTier==='tsuido'?'（都度会員）':'（非会員）');}else{eb.style.display='none';}var kb=document.getElementById('g-res-kanyo');if(gKanyo==='thin'){kb.style.display='';hasAny=true;document.getElementById('g-res-kanyo-val').textContent='10,000円';document.getElementById('g-res-kanyo-sub').textContent='薄い関与・90〜120分';}else if(gKanyo==='thick'){kb.style.display='';hasAny=true;document.getElementById('g-res-kanyo-val').textContent=fmt(thN<=5?15000:20000);document.getElementById('g-res-kanyo-sub').textContent='濃い関与・90〜120分・'+thN+'名';}else if(gKanyo==='visit'){kb.style.display='';hasAny=true;document.getElementById('g-res-kanyo-val').textContent='20,000円';document.getElementById('g-res-kanyo-sub').textContent='出張レッスン・90〜120分';}else{kb.style.display='none';}var ab=document.getElementById('g-res-acc');var accVal=document.querySelector('input[name="g-acc"]:checked').value;if(accVal==='in'){ab.style.display='';hasAny=true;document.getElementById('g-res-acc-val').textContent='3,000円（スタジオ内・私発）';}else if(accVal==='out'){ab.style.display='';hasAny=true;document.getElementById('g-res-acc-val').textContent='5,000円（外部・外主催）';}else{ab.style.display='none';}document.getElementById('g-res-empty').style.display=hasAny?'none':'';}
-function onTierChange(){var v=document.getElementById('tierSelect').value;document.getElementById('instrumentRow').style.display=(v==='bb'||v==='home'||v==='home_bio')?'':'none';}
-function checkConsent(){var ok=document.getElementById('consent1').checked&&document.getElementById('consent2').checked&&document.getElementById('consent3').checked;document.getElementById('submitBtn').disabled=!ok;}
+function onTierChange(){
+  var v=document.getElementById('tierSelect').value;
+  document.getElementById('instrumentRow').style.display=(v==='bb'||v==='home'||v==='home_bio')?'':'none';
+  var msg=document.querySelector('[name=message]');
+  if(msg){
+    if(v==='custom'){
+      msg.placeholder='ご希望の内容をできるだけ具体的にお書きください（例：月1万円でBigBand練習・グループ活動込みにしたい、など）';
+    } else {
+      msg.placeholder='自由にどうぞ';
+    }
+  }
+}
+function checkConsent(){
+  var ok=document.getElementById('consent1').checked&&document.getElementById('consent2').checked&&document.getElementById('consent3').checked;
+  var payOk=document.querySelector('input[name="payment_method"]:checked')!==null;
+  document.getElementById('submitBtn').disabled=!(ok&&payOk);
+}
+function onPaymentChange(){checkConsent();}
 function updateFinalSummary(){
   var form=document.getElementById('regForm');
   var name=form.querySelector('[name=name]').value;
@@ -455,7 +486,7 @@ function updateFinalSummary(){
   if(pTier&&(pTier!=='shima'||monthly>0))html+='<br>月額合計：<strong>'+fmt(monthly)+'</strong>';
   document.getElementById('finalSummary').innerHTML=html;
 }
-function submitForm(){var tierVal=document.getElementById('tierSelect').value;var form=document.getElementById('regForm');var data=new FormData(form);fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}).then(function(r){if(r.ok){goPage(5);if(tierVal==='home'||tierVal==='home_bio'){show('sq-home');hide('sq-pay');}else{hide('sq-home');show('sq-pay');document.getElementById('squareLink').href=SQUARE_LINKS[tierVal]||'#';}}else{alert('送信に失敗しました。もう一度お試しください。');}}).catch(function(){alert('通信エラーが発生しました。');});}
+function submitForm(){var tierVal=document.getElementById('tierSelect').value;var form=document.getElementById('regForm');var data=new FormData(form);fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}).then(function(r){if(r.ok){goPage(5);if(tierVal==='home'||tierVal==='home_bio'||tierVal==='custom'){show('sq-home');hide('sq-pay');}else{hide('sq-home');show('sq-pay');document.getElementById('squareLink').href=SQUARE_LINKS[tierVal]||'#';}}else{alert('送信に失敗しました。もう一度お試しください。');}}).catch(function(){alert('通信エラーが発生しました。');});}
 </script>
 </body>
 </html>
