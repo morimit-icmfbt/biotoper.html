@@ -272,6 +272,7 @@ select{font-size:12px;padding:4px 7px;border:1px solid #C5B8A2;border-radius:6px
       <tr><td>自宅マンツーマン（ソロ譜リクエスト可・年1曲程度）</td><td class="ok" id="bc-home-0">✓</td><td class="ok" id="bc-home_bio-0">✓</td><td class="ng" id="bc-shima-0">—</td><td class="ng" id="bc-shima_bio-0">—</td><td class="ng" id="bc-bb-0">—</td><td class="ng" id="bc-tsuido-0">—</td><td class="ng" id="bc-oen-0">—</td><td class="ng" id="bc-outer-0">—</td></tr>
       <tr><td>単発個人レッスン（60分）</td><td class="ng" id="bc-home-11">—</td><td class="ng" id="bc-home_bio-11">—</td><td class="ng" id="bc-shima-11">—</td><td class="ng" id="bc-shima_bio-11">—</td><td class="partial" id="bc-bb-11">6,000円</td><td class="partial" id="bc-tsuido-11">6,000円</td><td class="ng" id="bc-oen-11">—</td><td class="ng" id="bc-outer-11">—</td></tr>
       <tr><td>BigBand 定期練習室</td><td class="partial" id="bc-home-1">2,000円</td><td class="ok" id="bc-home_bio-1">✓</td><td class="partial" id="bc-shima-1">2,000円</td><td class="ok" id="bc-shima_bio-1">✓</td><td class="ok" id="bc-bb-1">✓</td><td class="partial" id="bc-tsuido-1">都度料</td><td class="ng" id="bc-oen-1">—</td><td class="ng" id="bc-outer-1">—</td></tr>
+      <tr><td>練習参加できない月保障（教室1回予約可）</td><td class="ng" id="bc-home-12">—</td><td class="ok" id="bc-home_bio-12">✓</td><td class="ng" id="bc-shima-12">—</td><td class="ok" id="bc-shima_bio-12">✓</td><td class="ok" id="bc-bb-12">✓</td><td class="ng" id="bc-tsuido-12">—</td><td class="ng" id="bc-oen-12">—</td><td class="ng" id="bc-outer-12">—</td></tr>
       <tr><td>BigBand 公演参加</td><td class="partial" id="bc-home-2">3,000円</td><td class="ok" id="bc-home_bio-2">✓</td><td class="partial" id="bc-shima-2">3,000円</td><td class="ok" id="bc-shima_bio-2">✓</td><td class="ok" id="bc-bb-2">✓</td><td class="partial" id="bc-tsuido-2">都度料</td><td class="partial" id="bc-oen-2">観客</td><td class="partial" id="bc-outer-2">観客</td></tr>
       <tr><td>OFF叉来会参加</td><td class="partial" id="bc-home-3">2,000円</td><td class="ok" id="bc-home_bio-3">✓</td><td class="partial" id="bc-shima-3">2,000円</td><td class="ok" id="bc-shima_bio-3">✓</td><td class="ok" id="bc-bb-3">✓</td><td class="partial" id="bc-tsuido-3">都度料</td><td class="ng" id="bc-oen-3">—</td><td class="ng" id="bc-outer-3">—</td></tr>
       <tr><td>音叉来会（収録）</td><td class="partial" id="bc-home-4">4,000円</td><td class="partial" id="bc-home_bio-4">4,000円</td><td class="partial" id="bc-shima-4">4,000円</td><td class="partial" id="bc-shima_bio-4">4,000円</td><td class="partial" id="bc-bb-4">4,000円</td><td class="partial" id="bc-tsuido-4">8,000円</td><td class="no" id="bc-oen-4">参加不可</td><td class="partial" id="bc-outer-4">12,000円</td></tr>
@@ -399,17 +400,17 @@ var P_CONCERT={home:3000,home_bio:0,shima:3000,shima_bio:0,bb:0,tsuido:3000,oen:
 var P_REH={home:2000,home_bio:0,shima:2000,shima_bio:0,bb:0,tsuido:2000,oen:3000};
 var P_INCLUDES={
   home:['レッスン（コース時間内・ソロ譜リクエスト可・年1曲程度）','アプリ響の杜・学習用Classroom','※BigBand公演・練習室は都度料金（下記参照）','※BigBand Classroomはビオトーパー登録で開きます'],
-  home_bio:['レッスン（コース時間内・ソロ譜リクエスト可・年1曲程度）','BigBand公演・練習室・OFF叉来会','アプリ響の杜・学習用＆BigBand Classroom'],
+  home_bio:['レッスン（コース時間内・ソロ譜リクエスト可・年1曲程度）','BigBand公演・練習室・OFF叉来会','アプリ響の杜・学習用＆BigBand Classroom','練習参加できない月保障（教室レッスン枠1回予約可）'],
   bb:['練習室（定期参加）','BigBand公演・OFF叉来会','アプリ響の杜・学習用＆BigBand Classroom','練習参加できない月保障（教室レッスン枠1回予約可）'],
   shima:['アプリ響の杜','※BigBand公演・練習室は都度料金（下記参照）','※BigBand Classroomはビオトーパー登録で開きます'],
-  shima_bio:['BigBand公演・練習室・OFF叉来会','アプリ響の杜・BigBand Classroom'],
+  shima_bio:['BigBand公演・練習室・OFF叉来会','アプリ響の杜・BigBand Classroom','練習参加できない月保障（教室レッスン枠1回予約可）'],
   tsuido:['BigBand Classroom','参加の都度お支払い'],
   oen:['アプリ響の杜閲覧','公演の観客として応援','BigBand Classroom（公演エントリー時のみ）']
 };
 var SQUARE_LINKS={bb:'https://square.link/u/xdJQUpg9',shima:'https://square.link/u/4TONq0gs',tsuido:'https://square.link/u/ZvMUMY2q',oen:'https://square.link/u/nCLptD0w'};
 var TIER_LABELS={home:'自宅レッスン生（未登録）',home_bio:'自宅レッスン生・ビオトーパー登録',shima:'島村レッスン生（未登録）',shima_bio:'島村レッスン生・しまビオ登録',bb:'BigBand本サブスク（純ビオ）',tsuido:'都度会員（つどビオ）',oen:'応援ビオトーパー',custom:'個別プラン希望'};
 var COL_ORDER=['home','home_bio','shima','shima_bio','bb','tsuido','oen','outer'];
-var ROW_COUNT=12;
+var ROW_COUNT=13;
 function fmt(n){return n.toLocaleString('ja-JP')+'円';}
 function show(id){document.getElementById(id).style.display='';}
 function hide(id){document.getElementById(id).style.display='none';}
